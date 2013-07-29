@@ -1,0 +1,18 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="{{APP.href('fdoc')}}">API Docs</a>
+        <div class="nav-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li id="nav-section-core">
+                    <a href="{{APP.href('fdoc/buckyball')}}">Buckyball Library</a>
+                </li>
+                <li id="nav-section-modules">
+                    <a href="{{APP.href('fdoc/fulleron')}}">Fulleron Framework</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+{{ THIS.hook('fdoc-section') | raw }}

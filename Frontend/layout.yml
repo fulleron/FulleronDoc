@@ -1,0 +1,26 @@
+fdoc-base:
+    - { hook: head, views: head }
+    - { include: common_js_libs }
+    - view: head
+        do:
+            - [ css, @FCom_Core/css/bootstrap-3.min.css ]
+            - [ css, @FCom_FulleronDoc/Frontend/css/fdoc.css ]
+            - [ css, @FCom_FulleronDoc/Frontend/css/highlight/github.css ]
+            - [ requireJs, highlight, @FCom_FulleronDoc/Frontend/js/highlight.pack ]
+            - [ requireJs, fdoc, @FCom_FulleronDoc/Frontend/js/fdoc ]
+            - [ requireRun, fdoc ]
+
+    - { hook: header, clear: true }
+    - { hook: footer, clear: true }
+
+/fdoc:
+    - { include: fdoc-base }
+    - { hook: main, views: fdoc/home }
+
+/fdoc/section:
+    - { include: fdoc-base }
+
+/fdoc/404:
+    - { include: fdoc-base }
+    - { hook: main, views: fdoc/home }
+    - { hook: fdoc-section, views: fdoc/404 }

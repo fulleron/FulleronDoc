@@ -1,0 +1,43 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="{{APP.href('fdoc/fulleron')}}">Fulleron API</a>
+        <div class="nav-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li id="nav-section-architecture">
+                    <a href="{{APP.href('fdoc/fulleron/architecture')}}">Architecture</a>
+                </li>
+                <li id="nav-section-core">
+                    <a href="{{APP.href('fdoc/fulleron/core')}}">Core</a>
+                </li>
+                <li id="nav-section-frontend">
+                    <a href="{{APP.href('fdoc/fulleron/frontend')}}">Frontend</a>
+                </li>
+                <li id="nav-section-admin">
+                    <a href="{{APP.href('fdoc/fulleron/admin')}}">Admin</a>
+                </li>
+                <li id="nav-section-api">
+                    <a href="{{APP.href('fdoc/fulleron/api')}}">API</a>
+                </li>
+                <li id="nav-section-tests">
+                    <a href="{{APP.href('fdoc/fulleron/tests')}}">Tests</a>
+                </li>
+                <li id="nav-section-modules">
+                    <a href="{{APP.href('fdoc/fulleron/modules')}}">Bundled Modules</a>
+                </li>
+                <li id="nav-section-market">
+                    <a href="{{APP.href('fdoc/fulleron/market')}}">Marketplace</a>
+                </li>
+                <li id="nav-section-eventhooks">
+                    <a href="{{APP.href('fdoc/fulleron/eventhooks')}}">Event Hooks</a>
+                </li>
+                <li id="nav-section-buckyball">
+                    <a href="{{APP.href('fdoc/buckyball')}}"><strong>Buckyball</strong></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+{{ THIS.hook('fdoc-section') | raw }}
+

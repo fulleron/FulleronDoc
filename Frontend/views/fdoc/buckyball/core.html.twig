@@ -1,0 +1,186 @@
+<div class="row">
+    <div class="col-lg-3">
+        <div class="well" id="fdoc-navbar">
+            <ul class="nav">
+                <li>
+                    <a href="#core-overview">Overview</a>
+                </li>
+                <li>
+                    <a href="#core-App">Application</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="#core-App-shortcuts">Shortcuts</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#core-Classes">Classes</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="#core-Classes-Overriding">Overriding</a>
+                        </li>
+                        <li>
+                            <a href="#core-Classes-Augmenting">Augmenting</a>
+                        </li>
+                        <li>
+                            <a href="#core-Classes-Autoloading">Autoloading</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#core-Config">Configuration</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="#core-Config-Set">Setting</a>
+                        </li>
+                        <li>
+                            <a href="#core-Config-Get">Getting</a>
+                        </li>
+                        <li>
+                            <a href="#core-Config-File">Load/Save</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#core-Events">Events</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="#core-Events-Trigger">Trigger</a>
+                        </li>
+                        <li>
+                            <a href="#core-Events-Observe">Observe</a>
+                        </li>
+                        <li>
+                            <a href="#core-Events-Manage">Manage</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#core-Session">Session</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="#core-Session-Data">Data</a>
+                        </li>
+                        <li>
+                            <a href="#core-Session-Messages">Messages</a>
+                        </li>
+                        <li>
+                            <a href="#core-Session-Security">Security</a>
+                        </li>
+                        <li>
+                            <a href="#core-Session-Handlers">Custom Handlers</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-9">
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="core-overview">Overview</h1>
+            </div>
+        </div>
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="core-App">Application</h1>
+            </div>
+
+            <h3 id="core-App-shortcuts">Shortcuts</h3>
+
+        </div>
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="core-Classes">Classes</h1>
+            </div>
+            <p>If you extend classes from <code>BClass</code> they will automatically receive capability to be
+            overridden or augmented by Buckyball. This is achieved using method <code>i()</code>, which allows
+            calling singleton or creating new instances.</p>
+
+            <p>To get a singleton simply call without arguments:</p>
+<pre class="well well-small"><code class="php">Your_Class_Name::i()->yourMethod();</code></pre>
+
+            <p>To create a new instance:</p>
+<pre class="well well-small"><code class="php">$obj = Your_Class_Name::i(true, $args);</code></pre>
+
+            <p>If you would like to enable IDE autocompletion for your classes, add this method with phpDoc:</p>
+<pre class="well well-small"><code class="php">/**
+* Shortcut to help with IDE autocompletion
+*
+* @return Your_Class_Name
+*/
+public static function i($new=false, array $args=array())
+{
+    return BClassRegistry::i()->instance(__CLASS__, $args, !$new);
+}</code></pre>
+
+            <h3 id="core-Classes-Overriding">Overriding Classes</h3>
+            <blockquote class="fdoc-callout fdoc-callout-warning">
+                <strong>Warning!</strong> It is not recommended to override classes in public modules,
+                because it can create double override conflicts. Try to use <a href="#core-Events">event</a> <a href="eventhooks">hooks</a> as much as possible.</p>
+            </blockquote>
+<pre class="well well-small"><code class="yaml">override:
+    class:
+        - [ Orig_Class_Name, Custom_Class_Name ]</code></pre>
+
+            <p>Alternatively:</p>
+<pre class="well well-small"><code class="php">BClassRegistry::i()->overrideClass($origClass, $customClass);</code></pre>
+
+            <h3 id="core-Classes-Augmenting">Augmenting Classes</h3>
+
+            <h3 id="core-Classes-Autoloading">Autoloading</h3>
+            <p>Sometimes you might need to load a 3rd party library, which has its own folder and class structure.
+            Simply create a folder <code>lib/</code> under your module, put library files there and add this to module manifest:</p>
+<pre class="well well-small"><code class="yaml">autoload: lib</code></pre>
+
+            <p>Alternatively:</p>
+<pre class="well well-small"><code class="php">BClassAutoload::i(true, array('root_dir' => $rootDir));</code></pre>
+
+        </div>
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="core-Config">Configuration</h1>
+            </div>
+
+            <h3 id="core-Config-Set">Setting</h3>
+
+            <h3 id="core-Config-Get">Getting</h3>
+
+            <h3 id="core-Config-File">Load/Save</h3>
+
+        </div>
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="core-Events">Events</h1>
+            </div>
+
+            <h3 id="core-Events-Trigger">Trigger events</h3>
+            <pre class="well well-small"><code class="php">BEvents::i()->fire($eventName, $eventArguments);</code></pre>
+
+            <h3 id="core-Events-Observe">Observe events</h3>
+<pre class="well well-small"><code class="yaml">observe:
+    - [ EventName1, Callback1 ]
+    - [ EventName2, Callback2, { arg1: val1, arg2: val2 } ]</code></pre>
+            <pre class="well well-small"><code class="php">BEvents::i()->on($eventName, $callback, $observerArguments);</code></pre>
+            <pre class="well well-small"><code class="php">BEvents::i()->once($eventName, $callback, $observerArguments);</code></pre>
+
+            <h3 id="core-Events-Manage">Manage observers</h3>
+            <pre class="well well-small"><code class="php">BEvents::i()->off($eventName, $alias);</code></pre>
+        </div>
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="core-Session">Session</h1>
+            </div>
+
+            <h3 id="core-Session-Data">Data</h3>
+
+            <h3 id="core-Session-Messages">Messages</h3>
+
+            <h3 id="core-Session-Security">Security</h3>
+            <h5>Session IP Protection</h5>
+            <h5>CSRF Protection</h5>
+
+            <h3 id="core-Session-Handlers">Custom Handlers</h3>
+        </div>
+    </div>
+</div>

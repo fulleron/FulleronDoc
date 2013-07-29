@@ -1,0 +1,43 @@
+body { padding-top: 60px; }
+h1 { font-size:30px; }
+
+.navbar-inverse { background: #2f82e0; }
+.navbar-inverse .navbar-brand { color: #EEE; }
+.navbar-inverse .navbar-nav > li > a { color: #EEE; }
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus { background:#2072cf; }
+#fdoc-navbar.affix { width:222px; }
+#fdoc-navbar .nav .nav { display:none; }
+#fdoc-navbar .nav > li > a { padding: 5px 20px; }
+#fdoc-navbar .nav > .active .nav { display:block; }
+#fdoc-navbar .nav .nav > li > a { padding: 3px 0 3px 30px; font-size: 90%; }
+#fdoc-navbar .nav > .active > a { font-weight: bold; }
+pre.well { background: #f8f8ff; }
+
+code { position: relative; }
+code:after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 12px;
+    font-weight: bold;
+    color: #bbb;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+code.php:after { content: 'PHP'; }
+code.yaml:after { content: 'YAML'; }
+code.javascript:after { content: 'JavaScript'; }
+code.stylesheet:after { content: 'CSS'; }
+code.bash:after { content: 'Bash'; }
+
+.fdoc-callout {
+    margin: 20px 0;
+    padding: 15px 30px 15px 15px;
+    border-left: 5px solid #eee;
+}
+.fdoc-callout-warning {
+    background-color: #fefbed;
+    border-color: #f1e7bc;
+}
