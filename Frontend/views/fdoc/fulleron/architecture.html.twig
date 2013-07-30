@@ -3,13 +3,17 @@
         <div class="well" id="fdoc-navbar">
             <ul class="nav">
                 <li>
-                    <a href="#module-overview">Overview</a>
+                    <a href="#arch-Overview">Overview</a>
                 </li>
+
                 <li>
-                    <a href="#module-BApp">Manifest</a>
+                    <a href="#arch-FileStructure">File Structure</a>
                     <ul class="nav">
                         <li>
-                            <a href="#module-BApp-shortcuts">Areas</a>
+                            <a href="#arch-FileStructure-Application">Application</a>
+                        </li>
+                        <li>
+                            <a href="#arch-FileStructure-Module">Module</a>
                         </li>
                     </ul>
                 </li>
@@ -19,8 +23,122 @@
     <div class="col-lg-9">
         <div class="fdoc-section">
             <div class="page-header">
-                <h1 id="module-overview">Overview</h1>
+                <h1 id="arch-Overview">Overview</h1>
             </div>
+        </div>
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="arch-FileStructure">File Structure</h1>
+            </div>
+
+            <h3 id="arch-FileStructure-Application">Application</h3>
+<pre class="well well-small"><code>index.php   .   .   .   .   .   .   .   Main Frontend entry point
+cron.php    .   .   .   .   .   .   .   Crontab entry point
+resize.php  .   .   .   .   .   .   .   Live resize thumbnails script
+admin/
+.   index.php   .   .   .   .   .   .   Admin entry point
+api/
+.   index.php   .   .   .   .   .   .   API entry point
+FCom/   .   .   .   .   .   .   .   .   Core bundled modules
+    {Module}/
+
+dlc/    .   .   .   .   .   .   .   .   Downloadable modules storage
+.   {Vendor}/
+.   .   {Module}/   .   .   .   .   .   Module Files (see the next section)
+
+local/  .   .   .   .   .   .   .   .   Local modules storage
+.   {Vendor}/
+.   .   {Module}/
+
+media/  .   .   .   .   .   .   .   .   Web accessible assets (images, documents)
+
+storage/    .   .   .   .   .   .   .   Web protected, writable storage
+.   config/     .   .   .   .   .   .   Configuration files
+.   .   db.yml      .   .   .   .   .   DB settings
+.   .   core.yml    .   .   .   .   .   Module run levels and debug levels per IP
+.   .   local.yml   .   .   .   .   .   Local modules configuration
+.   cache/  .   .   .   .   .   .   .   Cached files
+.   .   haml/   .   .   .   .   .   .   HAML templates compiled PHP files
+.   .   twig/   .   .   .   .   .   .   Twig templates compiled PHP files
+.   logs/       .   .   .   .   .   .   Logs storage
+.   .   debug.log   .   .   .   .   .   Debug messages
+.   .   errors.log  .   .   .   .   .   Fulleron errors
+.   .   exceptions.log  .   .   .   .   Fulleron and PHP exceptions</code></pre>
+
+
+            <h3 id="arch-FileStructure-Module">Module</h3>
+
+<pre class="well well-small"><code>{Vendor}/
+.   {Module}/
+.   .   manifest.yml    .   .   .   .   [1] Declaration of the module and its properties. This file is required.
+.   .   Main.php    .   .   .   .   .   This class may contain common functionality of the module, used by all areas
+.   .   Cron.php    .   .   .   .   .   Crontab routines
+.   .   Migrate.php     .   .   .   .   [2] DB migration scripts
+.   .   LICENSE     .   .   .   .   .   LICENSE text
+.   .   README.md   .   .   .   .   .   Module expanded information
+
+.   .   lib/    .   .   .   .   .   .   Store here any used 3rd party libraries
+.   .   .   {3rdPartyLib}/
+
+.   .   i18n/   .   .   .   .   .   .   Translation dictionaries
+.   .   .   en_US.yml
+.   .   .   de_DE.yml
+
+.   .   Model/  .   .   .   .   .   .   Model classes
+.   .   .   {ModelName}.php
+
+.   .   View/   .   .   .   .   .   .   View classes, when special functionality required within a view
+.   .   .   {ViewClass}.php
+
+.   .   views/  .   .   .   .   .   .   View templates, which are used by all areas, usually for emails
+.   .   .   email/  .   .   .   .   .   Template namespace
+.   .   .   .   {email-view-name}.twig.html
+
+.   .   Admin.php   .   .   .   .   .   Optional Admin bootstrap and admin helper methods
+.   .   Admin/      .   .   .   .   .   Admin specific logic and assets
+.   .   .   layout.yml  .   .   .   .   [3] Admin layout updates
+.   .   .   views/  .   .   .   .   .   Admin templates
+.   .   .   .   {module-namespace}/
+.   .   .   .   .   {view-name}.haml
+.   .   .   .   settings/
+.   .   .   .   .   {Vendor}_{Module}.haml
+.   .   .   Controller.php
+.   .   .   Controller/
+.   .   .   .   {AdminFeature}.php
+.   .   .   js/
+.   .   .   css/
+.   .   .   img/
+
+.   .   Frontend.php
+.   .   Frontend/
+.   .   .   layout.yml
+.   .   .   views/
+.   .   .   .   {module-namespace}/
+.   .   .   .   .   {view-name}.twig.html
+.   .   .   Controller.php
+.   .   .   Controller/
+.   .   .   .   {FrontendFeature}.php
+.   .   .   js/
+.   .   .   css/
+.   .   .   img/
+
+.   .   Api.php
+.   .   ApiServer/
+.   .   .   V1/
+.   .   .   .   Controller/
+.   .   .   .   .   {ApiFeature}.php
+.   .   .   .   .   {ApiFeature}_spec.txt
+
+.   .   Tests/
+.   .   .   AllTests.php
+.   .   .   Model/
+.   .   .   .   {Feature}Test.php</code></pre>
+            <blockquote>
+                <ol>
+                    <li><a href="{{ APP.href('fdoc/buckyball/module#module-Manifest') }}">Manifest File</a></li>
+                    <li><a href="{{ APP.href('fdoc/buckyball/layout#layout-LayoutFile') }}">Layout File</a></li>
+                </ol>
+            </blockquote>
         </div>
     </div>
 </div>

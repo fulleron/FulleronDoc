@@ -3,13 +3,30 @@
         <div class="well" id="fdoc-navbar">
             <ul class="nav">
                 <li>
-                    <a href="#module-overview">Overview</a>
+                    <a href="#layout-Overview">Overview</a>
                 </li>
                 <li>
-                    <a href="#module-BApp">Manifest</a>
+                    <a href="#layout-File">Layouts</a>
                     <ul class="nav">
                         <li>
-                            <a href="#module-BApp-shortcuts">Areas</a>
+                            <a href="#layout-File-Structure">Layout File Structure</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#layout-Views">Views &amp; Templates</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="#layout-Views-Methods">Methods</a>
+                        </li>
+                        <li>
+                            <a href="#layout-Views-Renderers">Renderers</a>
+                        </li>
+                        <li>
+                            <a href="#layout-Views-Root">Root</a>
+                        </li>
+                        <li>
+                            <a href="#layout-Views-Head">Head</a>
                         </li>
                     </ul>
                 </li>
@@ -19,8 +36,68 @@
     <div class="col-lg-9">
         <div class="fdoc-section">
             <div class="page-header">
-                <h1 id="module-overview">Overview</h1>
+                <h1 id="layout-Overview">Overview</h1>
             </div>
         </div>
+
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="layout-Layouts">Layouts</h1>
+            </div>
+
+            <h3 id="layout-Layouts-FileStructure">File Structure</h3>
+<pre class="well well-small"><code class="yaml">'mixin_layout':     .   .   .   .   Layout names that do not start with slash are mixins, and used by other layouts
+.   - { ... }
+
+'/page/layout':     .   .   .   .   .   .   .   .   .   Layouts that start with slash are used in specific pages
+
+.   - { root: 'root/view' }     .   .   .   .   .   .   Specify root template name
+
+.   - { include: 'mixin_layout' }   .   .   .   .   .   Apply another layout mixin
+
+.   - { hook: 'hook_name', views: 'view_name' }     .   Add a view to a hook
+
+.   - { hook: 'hook', views: [ 'view1', 'view2' ] } .   Add few views to a hook
+
+.   - { hook: 'hook', clear: ALL }  .   .   .   .   .   Clear all views from a hook
+
+.   - { hook: 'hook', clear: [ 'view1', 'view2' ] } .   Remove specific view(s) from a hook
+
+.   - { view: 'some/view', set: { 'some_var': 'value', 'foo': 'bar' } }
+
+.   - view: head
+.   .   do:
+.   .   .   - [ css, '@Module_Name/path/to/file.css' ]    .   .   .   Add CSS file to head
+.   .   .   - [ js, '@Module_Name/js/file.js', { if: lt IE 9 } ]      Add JS file, use options to specify condition
+.   .   .   - [ icon, '@Module_Name/favicon.ico' ]    .   .   .   .   Set favicon
+.   .   .   - [ meta, 'Meta-Name', 'Meta-Value' ]     .   .   .   .   Set meta tag in head
+.   .   .   - [ title, 'Page title' ]     .   .   .   .   .   .   .   Add section to page title
+.   .   .   - [ canonical, 'URL' ]    .   .   .   .   .   .   .   .   Set canonical URL
+.   .   .   - [ rss, 'RSS_URL.rss' ]      .   .   .   .   .   .   .   Set related RSS URL
+
+.   - { callback: 'Callback::layoutMethod' }  .   .   .   .   .   .   Execute external callback
+
+# ADMIN LAYOUT OPTIONS:
+
+.   - view: admin/nav
+.   .   do:
+.   .   .   - [ addNav, 'nav/path', { label: 'Nav Label', href: '/nav/href', pos: '10' ]    # Add navigation item
+
+.   .   .   - [ setNav, 'nav/path' ]        # Set navigation item
+
+.   - view: admin/header
+.   .   do:
+.   .   .   - [ addShortcut, 'nav/path', { label: 'Shortcut Label', href: '/nav/href' ]     # Add shortcut</code></pre>
+        </div>
+
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="layout-Views">Views &amp; Templates</h1>
+            </div>
+
+            <h3 id="layout-Views-Methods">Methods</h3>
+            <h3 id="layout-Views-Renderers">Renderers</h3>
+            <h3 id="layout-Views-Root">Root View</h3>
+            <h3 id="layout-Views-Head">Head View</h3>
     </div>
 </div>

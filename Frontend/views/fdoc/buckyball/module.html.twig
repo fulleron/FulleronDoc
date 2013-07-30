@@ -6,12 +6,18 @@
                     <a href="#module-overview">Overview</a>
                 </li>
                 <li>
-                    <a href="#module-BApp">Manifest</a>
+                    <a href="#module-Manifest">Manifest</a>
                     <ul class="nav">
                         <li>
-                            <a href="#module-BApp-shortcuts">Areas</a>
+                            <a href="#module-Manifest-FileStructure">File Structure</a>
+                        </li>
+                        <li>
+                            <a href="#module-Manifest-Areas">Areas</a>
                         </li>
                     </ul>
+                </li>
+                <li>
+                    <a href="#module-Migration">Migration</a>
                 </li>
             </ul>
         </div>
@@ -20,6 +26,59 @@
         <div class="fdoc-section">
             <div class="page-header">
                 <h1 id="module-overview">Overview</h1>
+            </div>
+        </div>
+
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="module-Manifest">Manifest</h1>
+            </div>
+
+            <h3 id="module-Manifest-FileStructure">File Structure</h3>
+<pre class="well well-small"><code class="yaml">modules:
+.   'Vendor_Module':
+.   .   version: '1.0.0'
+.   .   description: 'Module Short Description'
+.   .   categories: [ 'Catalog', 'Shipping' ]
+.   .   require:
+.   .   .   module:
+.   .   .   .   'Req_Module': '1.0.0'
+.   .   .   phpext: [ 'xmlrpc', 'soap' ]
+.   .   .   class: [ 'PHPUnit' ]
+.   .   before_bootstrap: 'Callback::method'
+.   .   auto_use: [ all, bootstrap, layout, views ]
+.   .   autoload: 'lib'
+.   .   default_config:
+.   .   .   'config_tree'
+.   .   provides:
+.   .   .   themes:
+.   .   .   .   'Theme_Name':
+.   .   .   .   .   area: 'FCom_Frontend'
+.   .   .   .   .   layout: 'layout.yml'      .   .   .   .   [1] Layout file
+.   .   override:
+.   .   .   class:
+.   .   .   .   'Original_Class_Name': 'New_Class_Name'
+
+.   .   areas:
+.   .   .   'FCom_(Admin|Frontend|ApiServer|Cron|Test)':
+.   .   .   .   'Area specific options'
+.   .   .   .   routing:
+.   .   .   .   .   - [ '(get|post|any)', '/route/path', 'Controller.action' ]
+.   .   .   .   observe:
+.   .   .   .   .   - [ 'Event::name', 'Callback::method' ]</code></pre>
+
+            <blockquote>
+                <ol>
+                    <li><a href="{{ APP.href('fdoc/buckyball/layout#layout-LayoutFile') }}">Layout File</a></li>
+                </ol>
+            </blockquote>
+
+            <h3 id="module-Manifest-Areas">Areas</h3>
+        </div>
+
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="module-Migration">Migration</h1>
             </div>
         </div>
     </div>
