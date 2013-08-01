@@ -31,6 +31,7 @@ code.yaml:after { content: 'YAML'; }
 code.javascript:after { content: 'JavaScript'; }
 code.stylesheet:after { content: 'CSS'; }
 code.bash:after { content: 'Bash'; }
+code.twig:after { content: 'Twig HTML'; }
 
 .fdoc-callout {
     margin: 20px 0;

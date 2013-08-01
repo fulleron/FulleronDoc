@@ -17,6 +17,21 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="#arch-Motivations">Motivations</a>
+                </li>
+                <li>
+                    <a href="#arch-Extending">Extending</a>
+                    <ul class="nav">
+                        <li><a href="#arch-Extending-Configuration">Configuration</a></li>
+                        <li><a href="#arch-Extending-Classes">Classes</a></li>
+                        <li><a href="#arch-Extending-DBTables">DB Tables</a></li>
+                        <li><a href="#arch-Extending-Templates">Templates</a></li>
+                        <li><a href="#arch-Extending-Layouts">Layouts</a></li>
+                        <li><a href="#arch-Extending-Javascript">Javascript</a></li>
+                        <li><a href="#arch-Extending-CSS">CSS</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
@@ -32,7 +47,7 @@
             </div>
 
             <h3 id="arch-FileStructure-Application">Application</h3>
-<pre class="well well-small"><code>index.php   .   .   .   .   .   .   .   Main Frontend entry point
+<pre class="well well-small">index.php   .   .   .   .   .   .   .   Main Frontend entry point
 cron.php    .   .   .   .   .   .   .   Crontab entry point
 resize.php  .   .   .   .   .   .   .   Live resize thumbnails script
 admin/
@@ -63,12 +78,12 @@ storage/    .   .   .   .   .   .   .   Web protected, writable storage
 .   logs/       .   .   .   .   .   .   Logs storage
 .   .   debug.log   .   .   .   .   .   Debug messages
 .   .   errors.log  .   .   .   .   .   Fulleron errors
-.   .   exceptions.log  .   .   .   .   Fulleron and PHP exceptions</code></pre>
+.   .   exceptions.log  .   .   .   .   Fulleron and PHP exceptions</pre>
 
 
             <h3 id="arch-FileStructure-Module">Module</h3>
 
-<pre class="well well-small"><code>{Vendor}/
+<pre class="well well-small">{Vendor}/
 .   {Module}/
 .   .   manifest.yml    .   .   .   .   [1] Declaration of the module and its properties. This file is required.
 .   .   Main.php    .   .   .   .   .   This class may contain common functionality of the module, used by all areas
@@ -132,13 +147,69 @@ storage/    .   .   .   .   .   .   .   Web protected, writable storage
 .   .   Tests/
 .   .   .   AllTests.php
 .   .   .   Model/
-.   .   .   .   {Feature}Test.php</code></pre>
+.   .   .   .   {Feature}Test.php</pre>
             <blockquote>
                 <ol>
                     <li><a href="{{ APP.href('fdoc/buckyball/module#module-Manifest') }}">Manifest File</a></li>
                     <li><a href="{{ APP.href('fdoc/buckyball/layout#layout-LayoutFile') }}">Layout File</a></li>
                 </ol>
             </blockquote>
+        </div>
+
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="arch-Motivations">Motivations &amp; Conventions</h1>
+            </div>
+
+            <p>Fulleron is built upon Buckyball library and inherently is not rigid in its structure or implementation. However, the following set of conventions is recommended for clean, uniform and maintainable application.</p>
+
+            <p><strong>Primary goal:</strong> Achieve a maintainable balance between:</p>
+
+            <h3 id="arch-Concepts">Abstract concepts</h3>
+            <ul>
+                <li>Separation of concerns: files should be separated by their role in app</li>
+                <li>Clear folder hierarchy: child entities should be under parent entities</li>
+            </ul>
+
+            <h3 id="arch-Conventions-HardwareLimitations">Hardware related limitations</h3>
+            <ul>
+                <li>Storage speed/latency: more folders/files and deeper structure affect performance</li>
+                <li>CPU/Storage limitation: optimize use of bytecode caching</li>
+            </ul>
+
+            <h3 id="arch-Conventions-DeveloperNeeds">Immediate developer needs</h3>
+            <ul>
+                <li>Files should be intuitively found in folder structure</li>
+                <li>Number of files open in IDE should be minimized</li>
+                <li>Number of total files should be minimized (avoid “rice code”)</li>
+                <li>Reduce number of files with the same name (not an issue in some IDEs)</li>
+                <li>Ease of debugging (resolving development errors)</li>
+                <li>Some local configuration files should be shared between repo copies</li>
+            </ul>
+
+            <h3 id="arch-Conventions-Maintenance">Future maintenance and flexibility</h3>
+            <ul>
+                <li>Ease of refactoring (renaming/moving)</li>
+                <li>Ease of debugging (finding and resolving production errors)</li>
+                <li>Internal extensibility (adding new features within module)</li>
+                <li>External extensibility (adding/changing functionality from other modules)</li>
+                <li>Core and market module files should never be changed by developer</li>
+            </ul>
+
+        </div>
+
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="arch-Extending">Extending and overriding existing functionality</h1>
+            </div>
+
+            <h3 id="arch-Extending-Configuration">Configuration</h3>
+            <h3 id="arch-Extending-Classes">Classes</h3>
+            <h3 id="arch-Extending-DBTables">DB Tables</h3>
+            <h3 id="arch-Extending-Templates">Templates</h3>
+            <h3 id="arch-Extending-Layouts">Layouts</h3>
+            <h3 id="arch-Extending-Javascript">Javascript</h3>
+            <h3 id="arch-Extending-CSS">CSS</h3>
         </div>
     </div>
 </div>

@@ -9,7 +9,13 @@
                     <a href="#core-App">Application</a>
                     <ul class="nav">
                         <li>
-                            <a href="#core-App-shortcuts">Shortcuts</a>
+                            <a href="#core-App-URLs">URLs</a>
+                        </li>
+                        <li>
+                            <a href="#core-App-DataRegistry">Data Registry</a>
+                        </li>
+                        <li>
+                            <a href="#core-App-Shortcuts">Shortcuts</a>
                         </li>
                     </ul>
                 </li>
@@ -37,7 +43,10 @@
                             <a href="#core-Config-Get">Getting</a>
                         </li>
                         <li>
-                            <a href="#core-Config-File">Load/Save</a>
+                            <a href="#core-Config-LoadFile">Load from a file</a>
+                        </li>
+                        <li>
+                            <a href="#core-Config-SaveFile">Save to a file</a>
                         </li>
                     </ul>
                 </li>
@@ -58,6 +67,9 @@
                 <li>
                     <a href="#core-Session">Session</a>
                     <ul class="nav">
+                        <li>
+                            <a href="#core-Session-OpenClose">Open / Close</a>
+                        </li>
                         <li>
                             <a href="#core-Session-Data">Data</a>
                         </li>
@@ -86,8 +98,38 @@
                 <h1 id="core-App">Application</h1>
             </div>
 
-            <h3 id="core-App-shortcuts">Shortcuts</h3>
+<pre class="well well-small"><code class="php">// Simple run application in entry point
+BApp::i()->run();
+</code></pre>
 
+            <h3 id="core-App-URLs">URLs</h3>
+<pre class="well well-small"><code class="php">// get base URL of the application
+$url = BApp::baseUrl();
+
+// get page URLs for links and redirection
+$url = BApp::href('my/url');
+// $url = 'https://127.0.0.1/fulleron/index.php/my/url';
+
+// get assets URLs for images, stylesheets, javascripts, etc
+$url = BApp::src('@Module_Name/js/my_script.js');
+// $url = 'https://127.0.0.1/fulleron/local/Module/Name/js/my_script.js';
+</code></pre>
+
+            <h3 id="core-App-DataRegistry">Data Registry</h3>
+
+<pre class="well well-small"><code class="php">// set variable data in registry
+BApp::i()->set($key, $val);
+
+// set constant data in registry
+BApp::i()->set($key, $val, true);
+</code></pre>
+
+            <h3 id="core-App-Shortcuts">Shortcuts</h3>
+<pre class="well well-small"><code class="php">// get current BModule object (from template or bootstrap)
+$module = BApp::m();
+
+//
+</code></pre>
         </div>
         <div class="fdoc-section">
             <div class="page-header">
@@ -128,6 +170,50 @@ public static function i($new=false, array $args=array())
 
             <h3 id="core-Classes-Augmenting">Augmenting Classes</h3>
 
+            <h5>Add a method to a class</h5>
+<pre class="well well-small"><code class="php">
+// $callback should be inline, function or static class.
+// the arguments are object instance and arguments passed from the call
+BClassRegistry::i()->addMethod('My_Class', 'myNewMethod', function($self, $arg1, $arg2) {
+    return $self->doSomething($arg1, $arg2);
+});
+
+$result = My_Class::i()->myNewMethod('foo', 'bar');
+</code></pre>
+
+            <blockquote class="fdoc-callout fdoc-callout-warning">
+                <strong>Warning!</strong> The following features are EXPERIMENTAL and there are known issues.
+                The main is that PHP doesn't allow overriding $this variable, so the augmentation will not affect calls from inside the class.
+            </blockquote>
+
+<pre class="well well-small"><code class="php">// override a class method
+BClassRegistry::i()->overrideMethod('My_Class', 'myMethod', $callback);
+
+// augment a class method - receive result from a method and change it before returning to original caller
+$callback = function($result, $origObject, $arg1, $arg2) {
+    // augment $result of previous object method call
+    $result['additional_info'] = 'foo';
+    return $result;
+}
+BClassRegistry::i()->augmentMethod('My_Class', 'myMethod', $callback);
+
+// augment a class instance property
+BClassRegistry::i()->augmentProperty('SomeClass', 'foo', 'set', 'override', 'MyClass::newSetter');
+BClassRegistry::i()->augmentProperty('SomeClass', 'foo', 'get', 'after', 'MyClass::newGetter');
+
+class MyClass {
+    static public function newSetter($object, $property, $value)
+    {
+        $object->$property = myCustomProcess($value);
+    }
+
+    static public function newGetter($object, $property, $prevResult)
+    {
+        return $prevResult+5;
+    }
+}
+</code></pre>
+
             <h3 id="core-Classes-Autoloading">Autoloading</h3>
             <p>Sometimes you might need to load a 3rd party library, which has its own folder and class structure.
             Simply create a folder <code>lib/</code> under your module, put library files there and add this to module manifest:</p>
@@ -142,11 +228,47 @@ public static function i($new=false, array $args=array())
                 <h1 id="core-Config">Configuration</h1>
             </div>
 
+<pre class="well well-small"><code class="php">// creating a custom config instance
+$config = BConfig::i(true, $initData);
+
+// clear config
+$config->unsetConfig();
+</code></pre>
+
             <h3 id="core-Config-Set">Setting</h3>
+<pre class="well well-small"><code class="php">$toSave = true; // in case we want this configuration to be saved in admin / settings page
+
+// Adding bulk configuration
+$config = array(
+    'modules' => array(
+        'My_Module' => array(
+            'api_key' => 'nUNa178bJKgf'
+        )
+    )
+);
+
+BConfig::i()->add($config, $toSave);
+
+// Adding / Setting a specific key
+$path = 'modules/My_Module/api_key'; // path to configuration key
+$value = 'nUNa178bJKgf'; // value can be string, number, boolean or array
+
+BConfig::i()->set($path, $value, $toSave);</code></pre>
 
             <h3 id="core-Config-Get">Getting</h3>
+<pre class="well well-small"><code class="php">$config = BConfig::i()->get('path/to/config');</code></pre>
 
-            <h3 id="core-Config-File">Load/Save</h3>
+            <h3 id="core-Config-LoadFile">Loading from a file</h3>
+
+<pre class="well well-small"><code class="php">BConfig::i()->addFile($fileName, $toSave);</code></pre>
+
+            <h3 id="core-Config-SaveFile">Saving to a file</h3>
+
+<pre class="well well-small"><code class="php">$fileName = BConfig::i()->get('fs/config_dir') . '/my_config.yml';
+$config = BConfig::i()->get('custom/section'); // get custom section from config
+$format = 'yml'; // optional, will be inferred from file extension. Allowed: yml, php, json
+
+BConfig::i()->writeFile($fileName, $config, $format);</code></pre>
 
         </div>
         <div class="fdoc-section">
@@ -155,14 +277,19 @@ public static function i($new=false, array $args=array())
             </div>
 
             <h3 id="core-Events-Trigger">Trigger events</h3>
-            <pre class="well well-small"><code class="php">BEvents::i()->fire($eventName, $eventArguments);</code></pre>
+            <pre class="well well-small"><code class="php">BEvents::i()->fire($eventName, $eventArguments);
+
+// Fire all events that match regex expression
+BEvents::i()->fireRegex($eventPattern, $eventArguments);</code></pre>
 
             <h3 id="core-Events-Observe">Observe events</h3>
 <pre class="well well-small"><code class="yaml">observe:
     - [ EventName1, Callback1 ]
     - [ EventName2, Callback2, { arg1: val1, arg2: val2 } ]</code></pre>
-            <pre class="well well-small"><code class="php">BEvents::i()->on($eventName, $callback, $observerArguments);</code></pre>
-            <pre class="well well-small"><code class="php">BEvents::i()->once($eventName, $callback, $observerArguments);</code></pre>
+            <pre class="well well-small"><code class="php">BEvents::i()->on($eventName, $callback, $observerArguments);
+
+// observe an event only once
+BEvents::i()->once($eventName, $callback, $observerArguments);</code></pre>
 
             <h3 id="core-Events-Manage">Manage observers</h3>
             <pre class="well well-small"><code class="php">BEvents::i()->off($eventName, $alias);</code></pre>
@@ -172,15 +299,72 @@ public static function i($new=false, array $args=array())
                 <h1 id="core-Session">Session</h1>
             </div>
 
+            <h3 id="core-Session-OpenClose">Open / Close</h3>
+<pre class="well well-small"><code class="php">// open a session
+BSession::i()->open();
+
+// close a session - remove lock from session to allow other requests
+BSession::i()->close();
+</code></pre>
+
             <h3 id="core-Session-Data">Data</h3>
+
+<pre class="well well-small"><code class="php">// get session data
+BSession::i()->get($key);
+
+// set session data
+BSession::i()->set($key, $data);
+
+// alternatively:
+$data =&amp; BSession::i()->dataToUpdate();
+$data[$key] = $data;
+
+</code></pre>
 
             <h3 id="core-Session-Messages">Messages</h3>
 
+<pre class="well well-small"><code class="php">// add messages to session in a controller
+try {
+    //... do something here
+    BSession::i()->addMessage('Operation successful', 'success', 'frontend');
+} catch (Exception $e) {
+    //... process exception
+    BSession::i()->addMessage('Operation failed', 'error', 'frontend');
+}
+
+// Output buffered messages in template
+$messages = BSession::i()->messages('frontend'); // returns array of messages
+
+</code></pre>
+
             <h3 id="core-Session-Security">Security</h3>
+
             <h5>Session IP Protection</h5>
+<pre class="well well-small"><code class="php">BConfig::i()->set('cookie/session_check_ip', true);</code></pre>
+
             <h5>CSRF Protection</h5>
+<pre class="well well-small"><code class="php">// TODO: Not sure where this doc is supposed to be: controller/response? layout/view/head?
+
+// set CSRF protection using referrer browser request header
+BConfig::i()->set('web/csrf_check_method', 'referrer');
+
+// set CSRF protection using token. All forms submitted should have X-CSRF-TOKEN field
+BConfig::i()->set('web/csrf_check_method', 'token');
+
+// output raw CSRF token
+echo BSession::i()->csrfToken();
+
+// add to head
+BLayout::i()->view('head')->meta('csrf-token', BSession::i()->csrfToken());</code></pre>
 
             <h3 id="core-Session-Handlers">Custom Handlers</h3>
+<pre class="well well-small"><code class="php">// add a new handler
+BSession::i()->addHandler($handlerName, $className);
+
+// set this handler as default
+BConfig::i()->set('cookie/session_handler', $handlerName);</code></pre>
+
+            <p>Currently only APC custom session handler is implemented in core, and is used automatically if APC enabled</p>
         </div>
     </div>
 </div>

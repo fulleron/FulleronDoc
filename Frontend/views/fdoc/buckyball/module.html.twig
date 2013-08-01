@@ -14,6 +14,12 @@
                         <li>
                             <a href="#module-Manifest-Areas">Areas</a>
                         </li>
+                        <li>
+                            <a href="#module-Manifest-Collecting">Collecting</a>
+                        </li>
+                        <li>
+                            <a href="#module-Manifest-Bootstrapping">Bootstrapping</a>
+                        </li>
                     </ul>
                 </li>
                 <li>
@@ -74,12 +80,30 @@
             </blockquote>
 
             <h3 id="module-Manifest-Areas">Areas</h3>
+
+            <h3 id="module-Manifest-Collecting">Collecting</h3>
+<pre class="well well-small"><code class="php">// scan in 'modules' subfolder modules in structure of Vendor/Module
+BModuleRegistry::i()->scan(__DIR__.'/modules/*/*');
+
+// manually declare a module
+BModuleRegistry::i()->addModule('My_Module', $manifestDataArray);
+</code></pre>
+
+            <h3 id="module-Manifest-Bootstrapping">Bootstrapping modules</h3>
+
+<pre class="well well-small"><code class="php">// Run bootstrap for the modules (including auto manifest processes and bootstrap methods)
+BModuleRegistry::i()->bootstrap();
+</code></pre>
         </div>
 
         <div class="fdoc-section">
             <div class="page-header">
                 <h1 id="module-Migration">Migration</h1>
             </div>
+
+            <pre class="well well-small"><code class="php">// run module migration scripts
+BMigrate::i()->migrateModules();
+            </code></pre>
         </div>
     </div>
 </div>

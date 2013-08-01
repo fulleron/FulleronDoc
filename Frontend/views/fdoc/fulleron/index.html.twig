@@ -2,18 +2,21 @@
     <div class="col-lg-3">
         <div class="well" id="fdoc-navbar">
             <ul class="nav">
-                <li>
-                    <a href="#index-Overview">Overview</a>
-                </li>
+                <li><a href="#index-Overview">Overview</a></li>
                 <li>
                     <a href="#index-Install">Installation</a>
                     <ul class="nav">
-                        <li>
-                            <a href="#index-Install-Deps">Dependencies</a>
-                        </li>
-                        <li>
-                            <a href="#index-Install-Download">Download</a>
-                        </li>
+                        <li><a href="#index-Install-Deps">Dependencies</a></li>
+                        <li><a href="#index-Install-Download">Download</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#index-GettingStarted">Getting Started</a>
+                    <ul class="nav">
+                        <li><a href="#index-GettingStarted-ManifestFile">Manifest File</a></li>
+                        <li><a href="#index-GettingStarted-Controller">Controller</a></li>
+                        <li><a href="#index-GettingStarted-LayoutViews">Layout &amp; Views</a></li>
+                        <li><a href="#index-GettingStarted-Models">Models</a></li>
                     </ul>
                 </li>
             </ul>
@@ -25,6 +28,7 @@
                 <h1 id="index-Overview">Overview</h1>
             </div>
         </div>
+
         <div class="fdoc-section">
             <div class="page-header">
                 <h1 id="index-Install">Installation</h1>
@@ -34,6 +38,150 @@
 <pre class="well well-small"><code class="bash">$ apt-get install mysql-server php5 php5-mysql</code></pre>
             <h3 id="index-Install-Download">Download</h3>
 <pre class="well well-small"><code class="bash">$ git clone git@github.com:fulleron/fulleron.git</code></pre>
+            <blockquote>
+                <strong>Note:</strong> Buckyball is included in Fulleron repository.
+            </blockquote>
         </div>
+
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="index-GettingStarted">Getting Started</h1>
+            </div>
+            <h3 id="index-GettingStarted-ManifestFile">Manifest File</h3>
+
+            <code>local/Acme/HelloWorld/manifest.yml</code>
+<pre class="well well-small"><code class="yaml php">modules:
+    Acme_HelloWorld:
+        # Module version is used in migration scripts
+        version: 0.1.0
+        # Bootstrap only after required modules
+        require: { module: { FCom_Core: 0.1.0 } }
+        # Short description for module listing and marketplace
+        description: "Hello World Fulleron Module"
+
+        # Specify instructions for specific areas
+        areas:
+            FCom_Frontend:
+                # Automatically use views and layout files in the module
+                auto_use: [ views, layout ]
+                # Declare routes
+                routing:
+                    # /hello URL will dispatch this action
+                    - [ any, /hello, Acme_HelloWorld_Frontend_Controller.index ]
+</code></pre>
+
+            <h3 id="index-GettingStarted-Controller">Controller</h3>
+
+            <code>local/Acme/HelloWorld/Frontend/Controller.php</code>
+<pre class="well well-small"><code class="php"><<i></i>?php
+
+class Acme_HelloWorld_Frontend_Controller extends FCom_Frontend_Controller_Abstract
+{
+    public function action_index()
+    {
+        $this->layout('/hello');
+
+        $hellos = Acme_HelloWorld_Model_Hello::i()->orm()->order_by_desc('created_at')->find_many();
+
+        $this->view('acme/hello')->set('hellos', $hellos);
+    }
+
+    public function action_index__POST()
+    {
+        try {
+            $data = BRequest::i()->post('hello');
+
+            $data = BUtil::arrayMask($data, 'author,message');
+
+            Acme_HelloWorld_Model_Hello::i()->create($data)->save();
+
+            BSession::i()->addMessage('Thank you for your feedback', 'success', 'frontend');
+        } catch (Exception $e) {
+            BSession::i()->addMessage($e->getMessage(), 'error', 'frontend');
+        }
+        BResponse::i()->redirect('hello');
+    }
+}
+</code></pre>
+
+            <h3 id="index-GettingStarted-LayoutViews">Layout &amp; Views</h3>
+
+<code>local/Acme/HelloWorld/Frontend/layout.yml</code>
+<pre class="well well-small"><code class="yaml php"></code>/hello:
+    - { include: base }
+    - { hook: main, views: acme/hello }
+</code></pre>
+
+<code>local/Acme/HelloWorld/Frontend/views/acme/hello.html.twig</code>
+<pre class="well well-small"><code class="twig html">{{ "<h1>{{ 'Say Hello, World!' |_ }}</h1>
+
+<form class=\"form-horizontal\" action=\"{{ APP.href('hello') }}\" method=\"post\">
+    <fieldset>
+        <div class=\"form-group\">
+            <label for=\"author\" class=\"form-label\">{{ 'Your Name:' |_ }}</label>
+            <input id=\"author\" name=\"hello[author]\" placeholder=\"Clark Kent\" required>
+        </div>
+        <div class=\"form-group\">
+            <label for=\"message\" class=\"form-label\">{{ 'Your Message:' |_ }}</label>
+            <textarea id=\"message\" name=\"hello[message]\" required></textarea>
+        </div>
+        <button type=\"submit\" class=\"btn btn-primary\">{{ 'Say Hello!' |_ }}</button>
+    </fieldset>
+</form>
+
+<dl>
+{% for hello in THIS.hellos %}
+    <dt>From {{ hello.get('author') }} at <em>{{ hello.get('created_at') |date('F jS g:ia') }}</em></dt>
+    <dd>{{ hello.get('message') }}</dd>
+{% endfor %}
+</dl>
+" | escape }}
+</code></pre>
+
+            <h3 id="index-GettingStarted-Models">Models</h3>
+
+<code>local/Acme/HelloWorld/Model/Hello.php</code>
+<pre class="well well-small"><code class="php"><<i></i>?php
+
+class Acme_HelloWorld_Model_Hello extends FCom_Core_Model_Abstract
+{
+    static protected $_table = 'acme_hello';   # declare class table name
+    static protected $_origClass = __CLASS__;  # save original class name for potential overrides
+
+    public function onBeforeSave()
+    {
+        if (!parent::onBeforeSave()) return false;
+
+        if (!$this->created_at) {
+            $this->created_at = BDb::now();
+        }
+
+        return true;
+    }
+}
+</code></pre>
+
+<code>local/Acme/HelloWorld/Migrate.php</code>
+<pre class="well well-small"><code class="php"><<i></i>?php
+
+class Acme_HelloWorld_Migrate extends BClass
+{
+    public function install__0_1_0()
+    {
+        BDb::ddlTableDef(Acme_HelloWorld_Model_Hello::table(), array(
+            'COLUMNS' => array(
+                'id' => 'INT UNSIGNED NOT NULL AUTO_INCREMENT',
+                'author' => 'VARCHAR(255) NOT NULL',
+                'message' => 'TEXT NOT NULL',
+                'created_at' => 'DATETIME NOT NULL',
+            ),
+            'PRIMARY' => '(id)',
+        ));
+    }
+}
+</code></pre>
+
+            <h3 id="index-GettingStarted-RunLevel">Module Run Level</h3>
+            <p>In admin, go to <code>System > Installed Modules</code>, find <code>Acme_HelloWorld</code> module, set run level as <code>REQUIRED</code></p>
     </div>
 </div>
