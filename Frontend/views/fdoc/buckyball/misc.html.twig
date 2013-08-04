@@ -25,6 +25,9 @@
                         <li>
                             <a href="#misc-Debug-Profiling">Profiling</a>
                         </li>
+                        <li>
+                            <a href="#misc-Debug-WarningsErrors">Warnings &amp; Errors</a>
+                        </li>
                     </ul>
                 </li>
                 <li>
@@ -41,6 +44,9 @@
                         </li>
                         <li>
                             <a href="#misc-Util-FileTools">File Tools</a>
+                        </li>
+                        <li>
+                            <a href="#misc-Util-HTMLTools">HTML Tools</a>
                         </li>
                         <li>
                             <a href="#misc-Util-Encryption">Encryption</a>
@@ -66,13 +72,24 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="#misc-Email">Email</a>
+                </li>
+                <li>
                     <a href="#misc-Locale">Localization</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="#misc-Locale-Translations">Translations</a>
+                        </li>
+                        <li>
+                            <a href="#misc-Locale-Currency">Currency</a>
+                        </li>
+                        <li>
+                            <a href="#misc-Locale-Dates">Dates</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="#misc-LoginThrottle">Login Throttling</a>
-                </li>
-                <li>
-                    <a href="#misc-ModelUser">User Model</a>
                 </li>
                 <li>
                     <a href="#misc-YAML">YAML</a>
@@ -91,9 +108,15 @@
             <div class="page-header">
                 <h1 id="misc-Data">Data</h1>
             </div>
-
+<pre class="well well-small"><code class="php">$data = new BData(array('foo'=>'bar', 'a'=>'b'));
+foreach ($data as $k=>$v) {
+    echo $k.': '.$v."\n";
+}
+</code></pre>
             <h3 id="misc-Data-Value">Custom Value</h3>
-
+<pre class="well well-small"><code class="php">$value = new BValue('A String Value');
+echo $value;
+</code></pre>
         </div>
 
         <div class="fdoc-section">
@@ -103,9 +126,34 @@
 
             <h3 id="misc-Debug-Mode">Run Modes</h3>
 
+            <h5>DEBUG</h5>
+            <h5>DEVELOPMENT</h5>
+            <h5>STAGING</h5>
+            <h5>PRODUCTION</h5>
+            <h5>MIGRATION</h5>
+            <h5>INSTALLATION</h5>
+            <h5>RECOVERY</h5>
+            <h5>DISABLED</h5>
+
             <h3 id="misc-Debug-Logging">Logging</h3>
 
+<pre class="well well-small"><code class="php">BDebug::debug('Point to debug');</code></pre>
+
             <h3 id="misc-Debug-Profiling">Profiling</h3>
+
+<pre class="well well-small"><code class="php">$p1 = BDebug::debug('Point to profile');
+// .. some code here
+BDebug::profile($p1);
+</code></pre>
+            <h3 id="misc-Debug-WarningsErrors">Warnings &amp; Errors</h3>
+            <p>Depending on run mode debug presets, each message will trigger appropriate action</p>
+<pre class="well well-small"><code class="php">BDebug::info('Informational message');
+BDebug::notice('Notice message');
+BDebug::warning('Warning message');
+BDebug::error('Error message');
+BDebug::critical('Critical message');
+BDebug::alert('Alert message');
+</code></pre>
 
         </div>
 
@@ -116,49 +164,255 @@
 
             <h3 id="misc-Util-StringTools">String Tools</h3>
 
+<pre class="well well-small"><code class="php">BUtil::injectVars($str, $vars);
+
+BUtil::isEmptyDate($date);
+
+BUtil::nextStringValue($string, $chars = null);
+
+BUtil::previewText($text, $limit);
+
+BUtil::randomString($strLen = 8, $chars = null);
+BUtil::randomPattern($pattern);
+
+BUtil::simplifyString($str, $pattern = '#[^a-z0-9-]+#', $filler = '-');
+
+BUtil::sprintfn($format, $args);
+
+</code></pre>
+
             <h3 id="misc-Util-ArrayTools">Array Tools</h3>
+
+<pre class="well well-small"><code class="php">BUtil::arrayCleanInt($array);
+
+BUtil::arrayCompare($array1, $array2);
+
+BUtil::arrayInsert($array, $items, $where);
+
+BUtil::arrayMask($source, $fields, $inverse = false, $setNulls = true);
+
+BUtil::arrayMerge();
+
+BUtil::arrayToObject($array);
+BUtil::objectToArray($object);
+
+BUtil::arrayToOptions($source, $labelField, $keyField = null, $emptyLabel = null);
+
+BUtil::arrayWalk($array, $callback, $args = array(), $ignoreExceptions = false);
+
+BUtil::topoSort($array, $args = array());
+</code></pre>
 
             <h3 id="misc-Util-URLTools">URL Tools</h3>
 
+<pre class="well well-small"><code class="php">BUtil::isUrlFull($url);
+
+BUtil::paginateSortAttr($url, $state, $field, $class);
+BUtil::paginateSortUrl($url, $state, $field);
+
+BUtil::setUrlQuery($url, $params);
+
+BUtil::unparseUrl($parsedUrl);
+</code></pre>
+
             <h3 id="misc-Util-FileTools">File Tools</h3>
 
+<pre class="well well-small"><code class="php">BUtil::ensureDir($dir);
+BUtil::globRecursive($pattern, $flags = 0);
+BUtil::isPathAbsolute($path);
+BUtil::normalizePath($path);
+</code></pre>
+
+            <h3 id="misc-Util-HTMLTools">HTMLTools</h3>
+
+<pre class="well well-small"><code class="php">BUtil::optionsHtml($options, $default);
+
+BUtil::tagHtml($tag, $attrs = array(), $content = null);
+</code></pre>
             <h3 id="misc-Util-Encryption">Encryption</h3>
+
+<pre class="well well-small"><code class="php">BUtil::encrypt($value, $key = null, $base64 = true);
+BUtil::decrypt($value, $key = null, $base64 = true);
+</code></pre>
 
             <h3 id="misc-Util-Hashing">Hashing</h3>
 
+<pre class="well well-small"><code class="php">$hash = Bcrypt::i()->hash($input);
+Bcrypt::i()->verify($input, $hash);
+
+BUtil::sha512base64($str);
+
+BUtil::fullSaltedHash($string, $salt = null, $algo = null, $iter = null);
+BUtil::validateSaltedHash($string, $storedHash);
+</code></pre>
+
             <h3 id="misc-Util-Logging">Logging</h3>
+
+<pre class="well well-small"><code class="php">BUtil::log($msg, $file = 'debug.log');
+</code></pre>
 
             <h3 id="misc-Util-HTTPClient">HTTP Client</h3>
 
+<pre class="well well-small"><code class="php">BUtil::remoteHttp($method, $url, $data);
+BUtil::httpClient($method, $url, $data);
+BUtil::post($url, $data);
+</code></pre>
+
             <h3 id="misc-Util-FTPClient">FTP Client</h3>
+
+<pre class="well well-small"><code class="php">$ftp = BFtpClient::i(true, array(
+    'hostname' => 'myserver.com',
+    'port' => '21',
+    'username' => 'ftpuser',
+    'password' => 'ftppassword'
+));
+
+$ftp->ftpUpload($fromDirOrFile, $toPath);
+</code></pre>
 
             <h3 id="misc-Util-Format">Format Conversion</h3>
 
+<pre class="well well-small"><code class="php">BUtil::fromJson($json);
+BUtil::toJson($array);
+BUtil::jsonIndent($json);
+
+BUtil::toJavaScript($val);
+
+BUtil::toRss($data);
+
+BUtil::formatDateRecursive($source, $format = 'm/d/Y');
+
+BUtil::timeAgo($ptime, $now = null, $long = false);
+</code></pre>
+
             <h3 id="misc-Util-Other">Other Goodies</h3>
 
+<pre class="well well-small"><code class="php">BUtil::call($callback, $args = array(), $array = false);
+
+BUtil::gravatar($email, $params = array();
+
+BUtil::dump($data);
+</code></pre>
+
         </div>
+
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="misc-Email">Email</h1>
+            </div>
+
+<pre class="well well-small"><code class="php">BEmail::i()->send(array(
+    'subject' => 'Email Subject',
+    'from' => 'me@example.com',
+    'to' => 'dest@example.com', // or array
+    'cc' => 'cc@example.com', // or array
+    'bcc' => 'bcc@example.com', // or array
+    'x-some-header' => 'custom header',
+    'body' => 'Message Body',
+    'attach' => 'file/name.zip', // or array
+));
+
+BEmail::i()->addHandler('my-handler', array('description'=>'Custom SMTP Service', 'callback' => 'MyEmail::handler'));
+
+BEmail::i()->setDefaultHandler('my-handler');
+
+BEmail::i()->egtHandlers();
+</code></pre>
+        </div>
+
         <div class="fdoc-section">
             <div class="page-header">
                 <h1 id="misc-Locale">Localization</h1>
             </div>
+
+            <h3 id="misc-Locale-Translations">Translations</h3>
+
+<pre class="well well-small"><code class="php">$l = BLocale::i();
+
+$l->addTranslation($array);
+$l->addTranslationFile($filename);
+
+$l->importTranslations($data, $params = array());
+
+$l->collectTranslations($rootDir, $targetFile);
+
+$l->saveToCSV($targetFile, $array);
+$l->saveToJSON($targetFile, $array);
+$l->saveToPHP($targetFile, $array);
+
+$l->setCurrentLanguage($lang);
+$l->getCurrentLanguage();
+
+$l->_('Original String %s', $params);
+
+$l->transliterate($str, $filter = '-');
+</code></pre>
+
+            <h3 id="misc-Locale-Currency">Currency</h3>
+
+<pre class="well well-small"><code class="php">$l = BLocale::i();
+
+$l->setCurrency($currency);
+
+$l->currency($value, $currency = null);
+</code></pre>
+
+            <h3 id="misc-Locale-Dates">Dates</h3>
+
+<pre class="well well-small"><code class="php">$l = BLocale::i();
+
+$l->datetimeDbToLocal($value, $full = false);
+$l->datetimeLocalToDb($value, $full = false);
+
+$l->parseRequestDates($request, $fields = null);
+
+$l->serverTz();
+$l->tzOffset($ts = null);
+</code></pre>
+
         </div>
 
         <div class="fdoc-section">
             <div class="page-header">
                 <h1 id="misc-LoginThrottle">Login Throttling</h1>
             </div>
-        </div>
 
-        <div class="fdoc-section">
-            <div class="page-header">
-                <h1 id="misc-ModelUser">User Model</h1>
-            </div>
+<pre class="well well-small"><code class="php">// example implementation, in your user model authentication method:
+
+    static public function authenticate($username, $password)
+    {
+        if (empty($username) || empty($password)) {
+            return false;
+        }
+
+        BLoginThrottle::i()->init('FCom_Admin_Model_User', $username); // init throttling
+
+        /** @var FCom_Admin_Model_User */
+        $user = static::i()->orm()->where(array('OR'=>array('username'=>$username, 'email'=>$username)))->find_one();
+        if (!$user || !$user->validatePassword($password)) {
+
+            BLoginThrottle::i()->failure(); // failed auth, delay response and block further attempts
+
+            return false;
+        }
+
+        BLoginThrottle::i()->success(); // successful auth, unblock username
+
+        return $user;
+    }
+</code></pre>
         </div>
 
         <div class="fdoc-section">
             <div class="page-header">
                 <h1 id="misc-YAML">YAML</h1>
             </div>
+
+<pre class="well well-small"><code class="php">BYAML::i()->load($filename, $cache = true);
+BYAML::i()->parse($yamlData);
+
+BYAML::i()->dump($arrayData);
+</code></pre>
         </div>
 
     </div>

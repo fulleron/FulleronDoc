@@ -10,12 +10,11 @@ class FCom_FulleronDoc_Frontend_Controller extends FCom_Frontend_Controller_Abst
     public function action_section()
     {
         $area = BRequest::i()->param('area');
-        $pageName = $this->viewProxy('fdoc/'.$area, 'index', 'fdoc-section');
+        $pageName = $this->viewProxy('fdoc/'.$area, 'index', 'fdoc-section', '/fdoc/section');
         if (!$pageName) {
             $this->forward('noroute');
             return;
         }
-        $this->layout('/fdoc/section');
         BLayout::i()->hookView('main', 'fdoc/'.$area);
     }
 

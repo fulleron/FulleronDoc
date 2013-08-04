@@ -96,8 +96,8 @@ storage/    .   .   .   .   .   .   .   Web protected, writable storage
 .   .   .   {3rdPartyLib}/
 
 .   .   i18n/   .   .   .   .   .   .   Translation dictionaries
-.   .   .   en_US.yml
-.   .   .   de_DE.yml
+.   .   .   en_US.ini
+.   .   .   de_DE.ini
 
 .   .   Model/  .   .   .   .   .   .   Model classes
 .   .   .   {ModelName}.php
@@ -115,19 +115,20 @@ storage/    .   .   .   .   .   .   .   Web protected, writable storage
 .   .   .   views/  .   .   .   .   .   Admin templates
 .   .   .   .   {module-namespace}/
 .   .   .   .   .   {view-name}.haml
-.   .   .   .   settings/
+.   .   .   .   settings/   .   .   .   Admin Settings pages
 .   .   .   .   .   {Vendor}_{Module}.haml
-.   .   .   Controller.php
-.   .   .   Controller/
+.   .   .   Controller.php  .   .   .   General admin Controller class
+.   .   .   Controller/     .   .   .   For more specific features put your controllers here
 .   .   .   .   {AdminFeature}.php
 .   .   .   js/
 .   .   .   css/
 .   .   .   img/
 
-.   .   Frontend.php
+.   .   Frontend.php    .   .   .   .   Optional Frontend bootstrap and admin helper methods
 .   .   Frontend/
-.   .   .   layout.yml
+.   .   .   layout.yml  .   .   .   .   [3] Frontend layout updates
 .   .   .   views/
+.   .   .   .   static/     .   .   .   Static page templates will proxy URL request to file structure
 .   .   .   .   {module-namespace}/
 .   .   .   .   .   {view-name}.twig.html
 .   .   .   Controller.php
@@ -137,7 +138,7 @@ storage/    .   .   .   .   .   .   .   Web protected, writable storage
 .   .   .   css/
 .   .   .   img/
 
-.   .   Api.php
+.   .   ApiServer.php   .   .   .   .   Optional ApiServer bootstrap and admin helper methods
 .   .   ApiServer/
 .   .   .   V1/
 .   .   .   .   Controller/
@@ -151,6 +152,7 @@ storage/    .   .   .   .   .   .   .   Web protected, writable storage
             <blockquote>
                 <ol>
                     <li><a href="{{ APP.href('fdoc/buckyball/module#module-Manifest') }}">Manifest File</a></li>
+                    <li><a href="{{ APP.href('fdoc/buckyball/db#db-Migration') }}">Migration Scripts</a></li>
                     <li><a href="{{ APP.href('fdoc/buckyball/layout#layout-LayoutFile') }}">Layout File</a></li>
                 </ol>
             </blockquote>

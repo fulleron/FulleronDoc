@@ -9,7 +9,7 @@
                     <a href="#ctrl-Request">Request</a>
                     <ul class="nav">
                         <li>
-                            <a href="#module-Request-Methods">Methods</a>
+                            <a href="#ctrl-Request-Methods">Methods</a>
                         </li>
                     </ul>
                 </li>
@@ -17,7 +17,7 @@
                     <a href="#ctrl-Response">Response</a>
                     <ul class="nav">
                         <li>
-                            <a href="#module-Response-Methods">Methods</a>
+                            <a href="#ctrl-Response-Methods">Methods</a>
                         </li>
                     </ul>
                 </li>
@@ -25,7 +25,7 @@
                     <a href="#ctrl-Routing">Routing</a>
                     <ul class="nav">
                         <li>
-                            <a href="#module-Routing-Declaration">Declaration</a>
+                            <a href="#ctrl-Routing-Declaration">Declaration</a>
                         </li>
                     </ul>
                 </li>
@@ -33,7 +33,7 @@
                     <a href="#ctrl-Action">Action Controllers</a>
                     <ul class="nav">
                         <li>
-                            <a href="#ctrl-Action-Declaration">Declaration</a>
+                            <a href="#ctrl-Action-Methods">Methods</a>
                         </li>
                     </ul>
                 </li>
@@ -52,7 +52,60 @@
             </div>
 
             <h3 id="ctrl-Request-Methods">Request Methods</h3>
+<pre class="well well-small"><code class="php">$r = BRequest::i();
 
+$r->server($key = null);            // get any $_SERVER var
+$r->serverIp();                     // server IP
+$r->serverName();                   // canonical server name
+
+$r->httpHost($includePort = true);  // current web service host name with optional custom port
+$r->httpPort();                     // current web service port number
+$r->httpOrigin();                   // request origin domain name, used for AJAX CORS requests
+$r->https();                        // true if current request is https
+$r->serverProtocol();               // HTTP/1.0 or HTTP/1.1
+$r->scheme();                       // http or https
+$r->xhr();                          // true if current request is XHR (AJAX)
+$r->method();                       // current request method (GET, POST, etc)
+$r->language();                     // top accepted browser language
+
+$r->docRoot();                      // web server document root filesystem dir
+$r->scriptName();                   // entry point script web path, takes into account service proxy
+$r->scriptFilename();               // entry point script filename, takes into account service proxy
+$r->scriptDir();                    // entry point script directory
+
+$r->webRoot($parentDepth = null);   // web root path for current application
+
+$r->baseUrl($forceSecure = null, $includeQuery = null); // full base URL, including scheme and domain name
+
+$r->rawPath();                      // full raw dynamic request path
+$r->path($offset, $length = null);  // either full dynamic request path, one part or slice of path
+$r->pathTranslated();               // from $_SERVER['PATH_TRANSLATED'], taking into account service proxy
+
+$r->get($key = null);               // request query parameters from $_GET
+$r->rawGet();                       // raw query string
+
+$r->post($key = null);              // request POST variables
+$r->rawPost();                      // raw POST request, used for JSON requests
+$r->json($asObject = false);        // get and parse JSON from raw POST request
+
+$r->request($key = null);           // get variable from $_REQUEST
+
+$r->cookie($name, $value = null, $lifespan = null, $path = null, $domain = null); // get or set cookie value
+
+$r->referrer($default = null);      // get HTTP referrer
+
+$r->receiveFiles($source, $targetDir, $typesRegex = null); // receive uploaded files (multiple)
+
+$r->csrf();                         // check for potential CSRF attack, using referrer or token methods
+
+$r->verifyOriginHostIp($method = 'OR', $host = null); // use in CORS request
+
+$r->currentUrl();                   // get the full current request URL
+
+$r->param($key = null, $fallbackToGet = false); // get a route param value
+
+$r->modRewriteEnabled();            // true if Apache mod_rewrite is enabled
+</code></pre>
         </div>
         <div class="fdoc-section">
             <div class="page-header">
@@ -61,6 +114,41 @@
 
             <h3 id="ctrl-Response-Methods">Response Methods</h3>
 
+<pre class="well well-small"><code class="php">$r = BResponse::i();
+
+$r->cookie($name, $value = null, $lifespan = null, $path = null, $domain = null); // alias for BRequest::cookie()
+
+$r->set($content);                  // set output content (string or array)
+$r->add($content);                  // add output content to previously set
+
+$r->setContentPrefix($string);      // set prefix to output content
+$r->setContentSuffix($string);      // set suffic to output content
+
+$r->setContentType($type);          // set output content type
+$r->getContentType();               // get^^
+
+$r->json($data);                    // output $data as JSON
+
+$r->fileContentType($fileName);     // infer file type
+$r->sendFile($source, $fileName = null, $disposition = 'attachment'); // send a file as response, $source - file name
+$r->sendContent($content, $fileName = 'download.txt', $disposition = 'attachment'); // send content string as file
+
+$r->status($status, $message = null, $output = true); // set response status and optionally output message
+
+$r->output($type = null);           // output the collected response to client
+
+$r->redirect($url, $status = 302);  // redirect a request to a different URL
+
+$r->httpsRedirect();                // redirect to a current URL but using https
+
+$r->httpSTS();                      // set String-Transport-Security header
+
+$r->cors($options = array());       // enable CORS in response
+
+$r->nocache();                      // disable cache for the response
+
+$r->startLongResponse();            // prepare for a long response (close session and disable timeout)
+</code></pre>
         </div>
         <div class="fdoc-section">
             <div class="page-header">
@@ -68,7 +156,41 @@
             </div>
 
             <h3 id="ctrl-Routing-Declaration">Routing Declaration</h3>
+            <h5>In manifest file</h5>
+<pre class="well well-small"><code class="php yaml">modules:
+    My_Module:
+        routing:
+            - [ any, /simple/route, My_Controller.simple_route ]
+</code></pre>
 
+            <h5>Alternatively in bootstrap method:</h5>
+<pre class="well well-small"><code class="php">BRouting::i()
+
+    ->route('GET /simple/route', 'My_Controller.simple_route')
+    ->get('/simple/route', 'My_Controller.simple_route')
+    ->post('/simple/route', 'My_Controller.simple_route')
+
+    ->route('GET|POST|PUT|DELETE /simple/route', 'My_Controller.simple_route')
+    ->any('/simple/route', 'My_Controller.simple_route')
+
+    ->any('/user/:user', 'User_Controller.form')
+
+    ->any('/product/*pattern', 'Product_Controller.catch_all')
+
+    ->any('/mix/:and/match/*params', 'Product_Controller.mix_and_match')
+
+    ->any('/slash/?:optional', 'Custom_Controller.index')
+
+    ->route('^(GET|POST) /(r1|r2)/?(.*)', 'Custom_Controller.regexp')
+    ->any('^(r1|r2)/?([.*]+)', 'Custom_Controller.regexp')
+
+    ->any('/feature/.action', 'Feature_Controller')
+
+    ->any('/inline/callback', function($args) {
+        //.. perform action inline
+    })
+;
+</code></pre>
         </div>
         <div class="fdoc-section">
             <div class="page-header">
@@ -76,7 +198,66 @@
             </div>
 
             <h3 id="ctrl-Action-Methods">Methods</h3>
+<pre class="well well-small"><code class="php">class My_Controller extends BActionController
+{
+    public function action_index()
+    {
+        $this->layout('/index');
+    }
 
+    public function action_index__POST()
+    {
+        try {
+            $post = BRequest::i()->post('form');
+            //... perform action
+
+            BSession::i()->addMessage($e->getMessage(), 'success', 'frontend');
+        } catch (Exception $e) {
+            BSession::i()->addMessage($e->getMessage(), 'error', 'frontend');
+        }
+        BResponse::i()->redirect('/simple/route');
+    }
+
+    public function action_index__DELETE()
+    {
+        //...
+    }
+
+    public function action_viewproxy()
+    {
+        $this->viewProxy(
+            $viewPrefix = 'my_views',
+            $defaultView = 'index',
+            $hookName = 'main',
+            $baseLayout = 'base'
+        );
+    }
+
+    public function beforeDispatch()
+    {
+        if (!parent::beforeDispatch()) return false;
+        //... perform actions before dispatch
+        return true;
+    }
+
+    public function bfterDispatch()
+    {
+        parent::bfterDispatch();
+        //... actions after dispatch
+    }
+
+    public function authenticate($args = array())
+    {
+        return My_Auth::i()->authenticate($this->_action);
+    }
+
+    public function authorize($args = array())
+    {
+        return My_Auth::i()->authorize($this->_action);
+    }
+}
+
+</code></pre>
         </div>
     </div>
 </div>

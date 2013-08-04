@@ -14,6 +14,8 @@
                     <a href="#index-GettingStarted">Getting Started</a>
                     <ul class="nav">
                         <li><a href="#index-GettingStarted-ManifestFile">Manifest File</a></li>
+                        <li><a href="#index-GettingStarted-ModuleRunLevel">Module Run Level</a></li>
+                        <li><a href="#index-GettingStarted-QuickPage">Quick Page</a></li>
                         <li><a href="#index-GettingStarted-Controller">Controller</a></li>
                         <li><a href="#index-GettingStarted-LayoutViews">Layout &amp; Views</a></li>
                         <li><a href="#index-GettingStarted-Models">Models</a></li>
@@ -47,6 +49,7 @@
             <div class="page-header">
                 <h1 id="index-GettingStarted">Getting Started</h1>
             </div>
+
             <h3 id="index-GettingStarted-ManifestFile">Manifest File</h3>
 
             <code>local/Acme/HelloWorld/manifest.yml</code>
@@ -69,6 +72,15 @@
                     # /hello URL will dispatch this action
                     - [ any, /hello, Acme_HelloWorld_Frontend_Controller.index ]
 </code></pre>
+
+            <h3 id="index-GettingStarted-ModuleRunLevel">Module Run Level</h3>
+            <p>In admin, go to <code>System > Installed Modules</code>, find <code>Acme_HelloWorld</code> module, set run level as <code>REQUIRED</code></p>
+
+            <h3 id="index-GettingStarted-QuickPage">Quick Page</h3>
+
+            <code>local/Acme/HelloWorld/Frontend/views/static/hello/world.html.twig</code>
+<pre class="well well-small"><code class="twig">{{ "<h1>{{ 'Hello, World!' |_ }}</h1>" | escape }}</code></pre>
+            <p>Go to <code>http://yourdomain.com/fulleron/hello/world</code></p>
 
             <h3 id="index-GettingStarted-Controller">Controller</h3>
 
@@ -181,7 +193,5 @@ class Acme_HelloWorld_Migrate extends BClass
 }
 </code></pre>
 
-            <h3 id="index-GettingStarted-RunLevel">Module Run Level</h3>
-            <p>In admin, go to <code>System > Installed Modules</code>, find <code>Acme_HelloWorld</code> module, set run level as <code>REQUIRED</code></p>
     </div>
 </div>
