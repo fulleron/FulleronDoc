@@ -101,9 +101,25 @@ BModuleRegistry::i()->bootstrap();
                 <h1 id="module-Migration">Migration</h1>
             </div>
 
-            <pre class="well well-small"><code class="php">// run module migration scripts
+<pre class="well well-small"><code class="php">// run module migration scripts
 BMigrate::i()->migrateModules();
             </code></pre>
+
+<pre class="well well-small"><code class="php"><<i></i>?php
+
+class My_Module_Migrate extends BClass
+{
+    public function install__0_1_0()
+    {
+        //... DDL statements for installation
+    }
+
+    public function upgrade__0_1_0__0_1_1()
+    {
+        //... DDL statements for upgrade
+    }
+}
+</code></pre>
         </div>
     </div>
 </div>

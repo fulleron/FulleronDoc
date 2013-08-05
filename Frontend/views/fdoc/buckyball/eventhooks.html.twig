@@ -3,24 +3,237 @@
         <div class="well" id="fdoc-navbar">
             <ul class="nav">
                 <li>
-                    <a href="#module-overview">Overview</a>
+                    <a href="#events-Overview">Overview</a>
                 </li>
                 <li>
-                    <a href="#module-BApp">Manifest</a>
+                    <a href="#events-CoreCom">Core Components</a>
                     <ul class="nav">
                         <li>
-                            <a href="#module-BApp-shortcuts">Areas</a>
+                            <a href="#events-CoreCom-Core">Core</a>
+                        </li>
+                        <li>
+                            <a href="#events-CoreCom-Controller">Controller</a>
+                        </li>
+                        <li>
+                            <a href="#events-CoreCom-DB">DB</a>
+                        </li>
+                        <li>
+                            <a href="#events-CoreCom-Layout">Layout</a>
+                        </li>
+                        <li>
+                            <a href="#events-CoreCom-Misc">Misc</a>
+                        </li>
+                        <li>
+                            <a href="#events-CoreCom-Module">Module</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#events-PlugIns">Plug Ins</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="#events-PlugIns-BGanon">BGanon</a>
+                        </li>
+                        <li>
+                            <a href="#events-PlugIns-BPHPTAL">BPHPTAL</a>
+                        </li>
+                        <li>
+                            <a href="#events-PlugIns-BTwig">BTwig</a>
+                        </li>
+                        <li>
+                            <a href="#events-PlugIns-BUI">BUI</a>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
     </div>
+
     <div class="col-lg-9">
         <div class="fdoc-section">
             <div class="page-header">
-                <h1 id="module-overview">Overview</h1>
+                <h1 id="events-Overview">Overview</h1>
             </div>
+        </div>
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="events-CoreCom">Core Components</h1>
+            </div>
+
+            <h3 id="events-CoreCom-Controller">Controller</h3>
+
+<pre class="well well-small"><code class="php">
+// BResponse::output
+fire('BResponse::output:before', array('content' => &$this->_content));
+fire('BResponse::output:after', array('content' => $this->_content));
+
+// BResponse::shutdown
+fire('BResponse::shutdown', array('last_method' => $lastMethod));
+
+// BRouting::dispatch
+fire('BRouting::dispatch:before');
+
+// BRouting::beforeDispatch
+fire('BRouting::beforeDispatch');
+
+// BRouting::afterDispatch
+fire('BRouting::afterDispatch');
+</code></pre>
+
+            <h3 id="events-CoreCom-DB">DB</h3>
+
+<pre class="well well-small"><code class="php">
+// BORM::find_one
+fire($class.'::find_one:orm', array('orm' => $this, 'class' => $class, 'id' => $id));
+fire($class.'::find_one:after', array('result' => &$result, 'class' => $class, 'id' => $id));
+
+// BORM::find_many
+fire($class.'::find_many:orm', array('orm' => $this, 'class' => $class));
+fire($class.'::find_many:after', array('result' => &$result, 'class' => $class));
+
+// BModel::onAfterCreate
+fire($class.'::onAfterCreate', array('model' => $this));
+
+// BModel::load
+fire($class.'::load:orm', array('orm' => $orm, 'class' => $class, 'called_class' => get_called_class()));
+
+// BModel::onAfterLoad
+fire($class.'::onAfterLoad', array('model' => $this));
+
+// BModel::onBeforeSave
+fire($class.'::onBeforeSave', array('model' => $this));
+
+// BModel::onAfterSave
+fire($class.'::onAfterSave', array('model' => $this));
+
+// BModel::onBeforeDelete
+fire($class.'::onBeforeDelete', array('model' => $this));
+
+// BModel::onAfterDelete
+fire($class.'::onAfterDelete', array('model' => $this));
+
+// BModelUser::login
+fire('BModelUser::login:after', array('user' => $this));
+
+// BModelUser::logout
+fire('BModelUser::logout:after', array('user' => $this));
+</code></pre>
+
+            <h3 id="events-CoreCom-Layout">Layout</h3>
+
+<pre class="well well-small"><code class="php">
+// BLayout::addAllViews
+fire('BLayout::addAllViews',  array('root_dir' => $rootDir, 'prefix' => $prefix, 'module' => $curModule));
+
+// BLayout::view
+fire('BLayout::view:add:' . $viewAlias, array('view' => $this->_views[$viewAlias]));
+fire('BLayout::view:update:' . $viewAlias, array('view' => $this->_views[$viewAlias]));
+
+// BLayout::applyTheme
+fire('BLayout::applyTheme:before', array('theme_name' => $themeName));
+fire('BLayout::applyTheme:after', array('theme_name' => $themeName));
+
+// BLayout::loadTheme
+fire('BLayout::loadTheme:before', array('theme_name' => $themeName, 'theme' => $theme));
+fire('BLayout::loadTheme:after', array('theme_name' => $themeName, 'theme' => $theme));
+
+// BLayout::dispatch($eventName, $route)
+fire("BLayout::{$eventName}", $args);
+fire("BLayout::{$eventName}: {$route}", $args);
+// applies to render:before, render:after
+
+// BView::hook
+fire('BView::hook:before', array('view' => $this, 'name' => $hookName));
+fire('BLayout::hook:' . $hookName, $args));
+fire('BView::hook:after', array('view' => $this, 'name' => $hookName)));
+
+// BView::render
+fire('BView::render:before', array('view' => $this));
+fire('BView::render:after', array('view' => $this))
+</code></pre>
+
+            <h3 id="events-CoreCom-Misc">Misc</h3>
+
+<pre class="well well-small"><code class="php">
+// BEmail::send
+fire('BEmail::send:before', array('email_data' => $emailData));
+fire('BEmail::send:after', array('email_data' => $emailData));
+
+// all BLoginThrottle events will have these args: $area, $username, $rec, $config
+
+// BLoginThrottle::init
+fire('BLoginThrottle::init:brute')
+fire('BLoginThrottle::init:brute_max')
+
+// BLoginThrottle:success
+fire('BLoginThrottle::success')
+
+// BLoginThrottle:failure
+fire('BLoginThrottle::fail:before')
+fire('BLoginThrottle::fail:wait')
+fire('BLoginThrottle::fail:after')
+
+</code></pre>
+
+            <h3 id="events-CoreCom-Module">Module</h3>
+
+<pre class="well well-small"><code class="php">
+// BModuleRegistry::bootstrap
+fire('BModuleRegistry::bootstrap:after');
+
+// BModule::bootstrap
+fire('BModule::bootstrap:before', array('module' => $this));
+</code></pre>
+        </div>
+
+
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="events-PlugIns">Plug Ins</h1>
+            </div>
+
+            <h3 id="events-PlugIns-BGanon">BGanon</h3>
+
+<pre class="well well-small"><code class="php">
+// BGanon::onLayoutRenderAfter($args)
+fire('BGanon::render', $args);
+fire('BGanon::render:'.$args['current_path'], $args);
+</code></pre>
+
+            <h3 id="events-PlugIns-BPHPTAL">BPHPTAL</h3>
+
+<pre class="well well-small"><code class="php">
+// BPHPTAL::factory
+fire('BPHPTAL::factory', array('tal' => $tal, 'tpl' => $tpl));
+
+// BPHPTAL_PreFilter::filter
+fire('BPHPTAL_PreFilter::filter', array('source' => &$source));
+
+// BPHPTAL_PreFilter::filterDOM
+fire('BPHPTAL_PreFilter::filterDOM', array('element' => $element));
+
+// BPHPTAL_PostFilter::filter
+fire('BPHPTAL_PostFilter::filter', array('html' => &$html));
+</code></pre>
+
+            <h3 id="events-PlugIns-BTwig">BTwig</h3>
+
+<pre class="well well-small"><code class="php">
+// BTwig::init
+fire('BTwig::init', array('options' => $options))
+</code></pre>
+
+            <h3 id="events-PlugIns-BUI">BUI</h3>
+
+<pre class="well well-small"><code class="php">
+// BViewGrid::gridPrepareConfig
+fire('BViewGrid::gridPrepareConfig:after', array('config' => &$c));
+
+// BViewGrid::gridData
+fire('BViewGrid::gridData:initORM: '.$config['id'], array('orm' => $orm, 'grid' => $grid));
+fire('BGridView::gridData:after: '.$config['id'], array('grid' => &$grid));
+</code></pre>
+
         </div>
     </div>
 </div>

@@ -139,22 +139,37 @@ $module = BApp::m();
             overridden or augmented by Buckyball. This is achieved using method <code>i()</code>, which allows
             calling singleton or creating new instances.</p>
 
+<pre class="well well-small"><code class="php">class Your_Class_Name extends BClass
+{
+    /**
+     * Remember current class for use in events, in case this class will be overridden, optional
+     *
+     * @var string
+     */
+    static protected $_origClass = __CLASS__;
+
+    /**
+     * Shortcut to help with IDE autocompletion, optional
+     *
+     * @return Your_Class_Name
+     */
+    public static function i($new=false, array $args=array())
+    {
+        return BClassRegistry::i()->instance(__CLASS__, $args, !$new);
+    }
+
+    public function yourMethod()
+    {
+
+    }
+}
+</code></pre>
+
             <p>To get a singleton simply call without arguments:</p>
 <pre class="well well-small"><code class="php">Your_Class_Name::i()->yourMethod();</code></pre>
 
             <p>To create a new instance:</p>
 <pre class="well well-small"><code class="php">$obj = Your_Class_Name::i(true, $args);</code></pre>
-
-            <p>If you would like to enable IDE autocompletion for your classes, add this method with phpDoc:</p>
-<pre class="well well-small"><code class="php">/**
-* Shortcut to help with IDE autocompletion
-*
-* @return Your_Class_Name
-*/
-public static function i($new=false, array $args=array())
-{
-    return BClassRegistry::i()->instance(__CLASS__, $args, !$new);
-}</code></pre>
 
             <h3 id="core-Classes-Overriding">Overriding Classes</h3>
             <blockquote class="fdoc-callout fdoc-callout-warning">

@@ -6,6 +6,14 @@
                     <a href="#misc-Overview">Overview</a>
                 </li>
                 <li>
+                    <a href="#misc-Cache">Cache</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="#misc-Cache-Backends">Backends</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
                     <a href="#misc-Data">Data</a>
                     <ul class="nav">
                         <li>
@@ -106,9 +114,26 @@
 
         <div class="fdoc-section">
             <div class="page-header">
+                <h1 id="misc-Cache">Cache</h1>
+            </div>
+<pre class="well well-small"><code class="php">BCache::i()->save($key, $data, $ttl = null);
+
+$data = BCache::i()->load($key);
+
+BCache::i()->delete($key);
+</code></pre>
+            <h3 id="misc-Cache-Backends">Backends</h3>
+<pre class="well well-small"><code class="php">BCache::i()->addBackend('custom', 'My_Cache_Backend');
+
+BCache::i()->getBackend('custom');
+</code></pre>
+        </div>
+
+        <div class="fdoc-section">
+            <div class="page-header">
                 <h1 id="misc-Data">Data</h1>
             </div>
-<pre class="well well-small"><code class="php">$data = new BData(array('foo'=>'bar', 'a'=>'b'));
+<pre class="well well-small"><code class="php">$data = BData::i(true, array('foo'=>'bar', 'a'=>'b'));
 foreach ($data as $k=>$v) {
     echo $k.': '.$v."\n";
 }
