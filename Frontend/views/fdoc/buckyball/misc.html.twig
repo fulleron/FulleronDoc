@@ -262,13 +262,19 @@ BUtil::decrypt($value, $key = null, $base64 = true);
 
             <h3 id="misc-Util-Hashing">Hashing</h3>
 
-<pre class="well well-small"><code class="php">$hash = Bcrypt::i()->hash($input);
-Bcrypt::i()->verify($input, $hash);
-
-BUtil::sha512base64($str);
+<pre class="well well-small"><code class="php">BUtil::sha512base64($str);
 
 BUtil::fullSaltedHash($string, $salt = null, $algo = null, $iter = null);
 BUtil::validateSaltedHash($string, $storedHash);
+
+// PHP implementations if missing:
+hash_hmac($algo, $data, $key, $raw_output = false)
+hash_pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output = false)
+password_hash($password);
+password_verify($password, $hash);
+
+// OATH HOTP (one time password)
+oath_hotp($secret, $counter, $len = 8);
 </code></pre>
 
             <h3 id="misc-Util-Logging">Logging</h3>
@@ -279,8 +285,6 @@ BUtil::validateSaltedHash($string, $storedHash);
             <h3 id="misc-Util-HTTPClient">HTTP Client</h3>
 
 <pre class="well well-small"><code class="php">BUtil::remoteHttp($method, $url, $data);
-BUtil::httpClient($method, $url, $data);
-BUtil::post($url, $data);
 </code></pre>
 
             <h3 id="misc-Util-FTPClient">FTP Client</h3>
@@ -292,7 +296,7 @@ BUtil::post($url, $data);
     'password' => 'ftppassword'
 ));
 
-$ftp->ftpUpload($fromDirOrFile, $toPath);
+$ftp->upload($fromDirOrFile, $toPath);
 </code></pre>
 
             <h3 id="misc-Util-Format">Format Conversion</h3>
@@ -317,6 +321,8 @@ BUtil::timeAgo($ptime, $now = null, $long = false);
 BUtil::gravatar($email, $params = array();
 
 BUtil::dump($data);
+
+BUtil::zipExtract($filename, $targetDir);
 </code></pre>
 
         </div>
