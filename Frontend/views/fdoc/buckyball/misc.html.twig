@@ -83,6 +83,9 @@
                     <a href="#misc-Email">Email</a>
                 </li>
                 <li>
+                    <a href="#misc-Validate">Input Validation</a>
+                </li>
+                <li>
                     <a href="#misc-Locale">Localization</a>
                     <ul class="nav">
                         <li>
@@ -351,6 +354,36 @@ BEmail::i()->getHandlers();
 </code></pre>
         </div>
 
+        <div class="fdoc-section">
+            <div class="page-header">
+                <h1 id="misc-Validate">Input Validation</h1>
+            </div>
+<pre class="well well-small"><code class="php">BValidate::i()->validateInput($data, $rules, 'form-name');
+
+$errors = BValidate::i()->validateErrors();
+
+class Model extends BModel
+{
+    $this->_validationRules = array(
+        array('firstname', '@required'),
+        array('lastname', '@required'),
+        array('email', '@required'),
+        array('email', '@email'),
+        array('url', '@url'),
+        array('password', '@required'),
+        array('password_confirm', '@password_confirm'),
+        array('custom_field', '/^regex$/', 'Invalid Custom Field', 'break'),
+    );
+}
+
+$model->validate($data);
+$model->validate($data, $additionalRules);
+$model->validate($data, array(), 'form-name');
+
+
+$validator = $view->validator($formName);
+
+        </div>
         <div class="fdoc-section">
             <div class="page-header">
                 <h1 id="misc-Locale">Localization</h1>

@@ -56,6 +56,10 @@
 .   .   autoload: 'lib'
 .   .   default_config:
 .   .   .   'config_tree'
+.   .   observe:
+.   .   .   - [ 'Event::name', 'Callback::method' ]
+.   .   crontab:
+.   .   .   - [ '* * * * *', 'Callback::method' ]
 .   .   provides:
 .   .   .   themes:
 .   .   .   .   'Theme_Name':
